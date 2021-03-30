@@ -168,7 +168,7 @@ def convert_mobi(file):
     cwd = os.getcwd()
     file = (cwd + file[1:]).replace('/','\\')
     file_mobi = file[:-5] + ".mobi"
-    p = Popen('"C:\\Program Files\\Calibre2\\ebook-convert.exe"' +' '+ '"'+file+'"' +' '+ '"'+file_mobi+'"', shell=True)
+    p = Popen('ebook-convert' +' '+ '"'+file+'"' +' '+ '"'+file_mobi+'"', shell=True)
     p.wait()
     return file_mobi, file
 
