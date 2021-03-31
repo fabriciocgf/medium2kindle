@@ -9,8 +9,6 @@ import requests
 import re
 import pypandoc
 from subprocess import Popen
-from dotenv import load_dotenv
-load_dotenv('.env')
 
 def parseArticle(soup):
     sec = soup.find_all("article")
@@ -176,13 +174,13 @@ def convert_mobi(file):
     return file_mobi, file
 
 def send2kindle(file):
-    sender = os.getenv("SENDER")
-    receiver = os.getenv("RECEIVER")
-    senderName = os.getenv("SENDER_NAME")
-    server = os.getenv("SERVER")
-    user = os.getenv("USER")
-    password = os.getenv("PASSWORD")
-    enc = os.getenv("ENCRIPT")
-    port = os.getenv("PORT")
+    sender = os.environ("SENDER")
+    receiver = os.environ("RECEIVER")
+    senderName = os.environ("SENDER_NAME")
+    server = os.environ("SERVER")
+    user = os.environ("USER")
+    password = os.environ("PASSWORD")
+    enc = os.environ("ENCRIPT")
+    port = os.environ("PORT")
     p = Popen('calibre-smtp'+' '+ sender +' '+ receiver +' '+ senderName +' -r '+ server +' -u '+ user +' -a '+ '"' + file + '"' +' -p '+ password +' -e '+ enc +' --port '+ port +'"',shell=True)
     p.wait()
