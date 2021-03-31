@@ -2,7 +2,7 @@
 import uvicorn
 from fastapi import BackgroundTasks, FastAPI
 from pydantic import BaseModel
-from selenium_medium import getAndSaveArticle, convert_epub, convert_mobi, send2kindle
+from medium2kindle.app.selenium_medium import getAndSaveArticle, convert_epub, convert_mobi, send2kindle
 import os
 
 def medium2kindle(site):
