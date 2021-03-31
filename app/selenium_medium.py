@@ -132,18 +132,11 @@ def parseArticle(soup):
     return doc
 
 def getAndSaveArticle(site):
-    #driver = webdriver.PhantomJS()
-    #driver.set_window_size(1120, 550)
-    #options = webdriver.FirefoxOptions()
-    #options.headless = True
-    #driver = webdriver.Firefox(executable_path="geckodriver.exe", options=options)
     options = webdriver.ChromeOptions()
     options.add_argument('--ignore-certificate-errors')
     options.add_argument('--incognito')
     options.add_argument('--headless')
-    options.add_argument("--use-gl=swiftshader")
-    options.add_argument("--disable-software-rasterizer")
-    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument('--no-sandbox')
     driver = webdriver.Chrome("chromedriver", options=options)
     driver.get(site)
     driver.execute_script("window.scrollTo(0, 5000);")
@@ -154,7 +147,7 @@ def getAndSaveArticle(site):
     fn = soup.title.string
     forb = '<>:/\|?*, \'!"'
     fn = ''.join(c for c in fn if c not in forb)
-    FILENAME = "./" + "Articles" + "/" + fn[0:52] + ".md"
+    FILENAME = "./app/" + "Articles" + "/" + fn[0:52] + ".md"
     with open(FILENAME, "w", encoding="utf8") as file:
         file.write(parseArticle(soup))
     driver.close()
@@ -162,25 +155,25 @@ def getAndSaveArticle(site):
 
 def convert_epub(file):
     output = pypandoc.convert_file(source_file=file, format='md', to='epub',outputfile=file[:-2]+"epub", extra_args=["-M2GB", "+RTS", "-K64m", "-RTS", '--toc'], encoding='utf-8')
-    #os.remove(file)
+    os.remove(file)
     return file[:-2]+"epub"
 
 def convert_mobi(file):
     cwd = os.getcwd()
-    file = (cwd + file[1:]).replace('/','\\')
+    file = (cwd + file[1:])
     file_mobi = file[:-5] + ".mobi"
     p = Popen('ebook-convert' +' '+ '"'+file+'"' +' '+ '"'+file_mobi+'"', shell=True)
     p.wait()
     return file_mobi, file
 
 def send2kindle(file):
-    sender = os.environ("SENDER")
-    receiver = os.environ("RECEIVER")
-    senderName = os.environ("SENDER_NAME")
-    server = os.environ("SERVER")
-    user = os.environ("USER")
-    password = os.environ("PASSWORD")
-    enc = os.environ("ENCRIPT")
-    port = os.environ("PORT")
-    p = Popen('calibre-smtp'+' '+ sender +' '+ receiver +' '+ senderName +' -r '+ server +' -u '+ user +' -a '+ '"' + file + '"' +' -p '+ password +' -e '+ enc +' --port '+ port +'"',shell=True)
+    sender = os.environ["SENDER"]
+    receiver = os.environ["RECEIVER"]
+    senderName = os.environ["SENDER_NAME"]
+    server = os.environ["SERVER"]
+    user = os.environ["USER"]
+    password = os.environ["PASSWORD"]
+    enc = os.environ["ENCRIPT"]
+    port = os.environ["PORT"]
+    p = Popen('calibre-smtp'+' '+ sender +' '+ receiver +' '+ senderName +' -r '+ server +' -u '+ user +' -a '+ file +' -p '+ password +' -e '+ enc +' --port '+ port,shell=True)
     p.wait()
