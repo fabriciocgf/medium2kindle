@@ -17,17 +17,13 @@ def medium2kindle(site):
 class Article(BaseModel):
     article_url : str
 
-# 2. Create the app object
 app = FastAPI()
 
-# 3. Index route, opens automatically on http://127.0.0.1:8000
 @app.post('/Article')
 async def medium_url(url : Article, background_tasks: BackgroundTasks):
     data = url.dict()
     background_tasks.add_task(medium2kindle, data['article_url'])
     return {'message': "Sending in background"}
 
-# 5. Run the API with uvicorn
-#    Will run on http://127.0.0.1:8000
 if __name__ == '__main__':
     uvicorn.run(app, host='0.0.0.0')
