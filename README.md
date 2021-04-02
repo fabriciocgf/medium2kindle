@@ -1,5 +1,7 @@
 # Send your Medium articles to Kindle
 
+This container is an API to get your medium articles and send them directly to your Kindle mail.
+
 You should deploy it using docker with the following environment variables:
 
 ```shell
@@ -22,7 +24,7 @@ docker run --env-file=.env -d --name medium2kindle -p 80:80 fabriciocgf/medium2k
 
 you can also run on a cloud provider, the configuration in Google Cloud is: 
 
-![](GCE.png)
+![Check the Picture](GCE.png)
 
 the use consists on making a POST request with the header Content-Type as application/json and the following body:
 
